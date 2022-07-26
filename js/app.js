@@ -7,10 +7,10 @@ let images = document.getElementById('images');
 let imgOne = document.getElementById('one');
 let imgTwo = document.getElementById('two');
 let imgThree = document.getElementById('three');
-let button = document.createElement('results-btn');
-let results = document.createElement('results-list');
+let button = document.getElementById('results-btn');
+let results = document.getElementById('results-list');
 
-function Product(name, photo = 'jpg', votes, views) {
+function Product(name, photo = 'jpg') {
   this.name = name;
   this.photo = `img/${name}.${photo}`;
   this.votes = 0;
@@ -91,6 +91,7 @@ function handleShowResults(){
       liElem.textContent = `${allProducts[i].name}: views: ${allProducts[i].views}, votes: ${allProducts[i].votes}`;
       results.appendChild(liElem);
     }
+    button.removeEventListener('click', handleShowResults);
   }
 }
 
