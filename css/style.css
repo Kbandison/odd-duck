@@ -1,5 +1,5 @@
 body{
-  background: linear-gradient(black, rgb(43, 181, 206));
+  background: linear-gradient(rgb(43, 181, 206), black);
   color:rgb(43, 181, 206);
   font-family: cursive;
 }
@@ -9,6 +9,7 @@ h2{
   margin: 30px auto;
   text-align: center;
   font-size: 25px;
+  color:black;
 }
 
 #duck{
@@ -18,6 +19,7 @@ h2{
   border: solid;
   padding: 10px;
   border-width: 10px;
+  color:black;
 }
 
 #results-btn {
