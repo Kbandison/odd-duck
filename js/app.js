@@ -10,6 +10,9 @@ let imgThree = document.getElementById('three');
 let button = document.getElementById('results-btn');
 let canvasElem = document.getElementById('results-chart');
 
+let retrievedProducts = localStorage.getItem('products');
+let parsedProducts = JSON.parse(retrievedProducts);
+
 function Product(name, photo = 'jpg') {
   this.name = name;
   this.photo = `img/${name}.${photo}`;
@@ -19,25 +22,29 @@ function Product(name, photo = 'jpg') {
   allProducts.push(this);
 }
 
-new Product('sweep', 'png');
-new Product('bag');
-new Product('banana');
-new Product('bathroom');
-new Product('boots');
-new Product('breakfast');
-new Product('bubblegum');
-new Product('chair');
-new Product('cthulhu');
-new Product('dog-duck');
-new Product('dragon');
-new Product('pen');
-new Product('pet-sweep');
-new Product('scissors');
-new Product('shark');
-new Product('tauntaun');
-new Product('unicorn');
-new Product('water-can');
-new Product('wine-glass');
+if(retrievedProducts){
+  allProducts = parsedProducts;
+}else{
+  new Product('sweep', 'png');
+  new Product('bag');
+  new Product('banana');
+  new Product('bathroom');
+  new Product('boots');
+  new Product('breakfast');
+  new Product('bubblegum');
+  new Product('chair');
+  new Product('cthulhu');
+  new Product('dog-duck');
+  new Product('dragon');
+  new Product('pen');
+  new Product('pet-sweep');
+  new Product('scissors');
+  new Product('shark');
+  new Product('tauntaun');
+  new Product('unicorn');
+  new Product('water-can');
+  new Product('wine-glass');
+}
 
 function randomGen() {
   return Math.floor(Math.random() * (allProducts.length));
@@ -83,6 +90,8 @@ function handleClick(event) {
   totalVotes--;
 
   if (totalVotes === 0){
+    let stringifiedProducts = JSON.stringify(allProducts);
+    localStorage.setItem('products', stringifiedProducts);
     images.removeEventListener('click', handleClick);
   }
   renderImg();
@@ -91,11 +100,6 @@ function handleClick(event) {
 function handleShowResults(){
   if(totalVotes === 0){
     renderChart();
-    // for(let i = 0; i < allProducts.length; i++){
-    //   let liElem = document.createElement('li');
-    //   liElem.textContent = `${allProducts[i].name}: views: ${allProducts[i].views}, votes: ${allProducts[i].votes}`;
-    //   results.appendChild(liElem);
-    // }
     button.removeEventListener('click', handleShowResults);
   }
 }
@@ -120,7 +124,7 @@ function renderChart(){
         label: '# of Votes',
         data: productVotes,
         backgroundColor: [
-          'gray'
+          'black'
         ],
         borderColor: [
           'rgb(43, 181, 206)'
@@ -141,7 +145,7 @@ function renderChart(){
       }]
     },
     options: {
-      // indexAxis: 'y',
+      indexAxis: 'y',
       scales: {
         y: {
           beginAtZero: true
