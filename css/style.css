@@ -1,5 +1,5 @@
 body{
-  background-color: black;
+  background: linear-gradient(black, rgb(43, 181, 206));
   color:rgb(43, 181, 206);
   font-family: cursive;
 }
@@ -63,4 +63,8 @@ img:active{
 #results-list{
   padding-left:60px;
   line-height: 25px;
+}
+
+#results-chart{
+  padding: 20px;
 }
