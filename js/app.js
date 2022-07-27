@@ -8,7 +8,7 @@ let imgOne = document.getElementById('one');
 let imgTwo = document.getElementById('two');
 let imgThree = document.getElementById('three');
 let button = document.getElementById('results-btn');
-let results = document.getElementById('results-list');
+let canvasElem = document.getElementById('results-chart');
 
 function Product(name, photo = 'jpg') {
   this.name = name;
@@ -43,15 +43,19 @@ function randomGen() {
   return Math.floor(Math.random() * (allProducts.length));
 }
 
-function renderImg(){
-  let imgOneIndex = randomGen();
-  let imgTwoIndex = randomGen();
-  let imgThreeIndex = randomGen();
+let productArray = [];
 
-  while (imgOneIndex === imgTwoIndex || imgTwoIndex === imgThreeIndex || imgThreeIndex === imgOneIndex){
-    imgTwoIndex = randomGen();
-    imgThreeIndex = randomGen();
+function renderImg(){
+
+  while(productArray.length < 6){
+    let randomNum = randomGen();
+    if(!productArray.includes(randomNum)){
+      productArray.push(randomNum);
+    }
   }
+  let imgOneIndex = productArray.shift();
+  let imgTwoIndex = productArray.shift();
+  let imgThreeIndex = productArray.shift();
 
   imgOne.src = allProducts[imgOneIndex].photo;
   imgOne.alt = allProducts[imgOneIndex].name;
@@ -76,8 +80,8 @@ function handleClick(event) {
       allProducts[i].votes++;
     }
   }
-
   totalVotes--;
+
   if (totalVotes === 0){
     images.removeEventListener('click', handleClick);
   }
@@ -86,15 +90,68 @@ function handleClick(event) {
 
 function handleShowResults(){
   if(totalVotes === 0){
-    for(let i = 0; i < allProducts.length; i++){
-      let liElem = document.createElement('li');
-      liElem.textContent = `${allProducts[i].name}: views: ${allProducts[i].views}, votes: ${allProducts[i].votes}`;
-      results.appendChild(liElem);
-    }
+    renderChart();
+    // for(let i = 0; i < allProducts.length; i++){
+    //   let liElem = document.createElement('li');
+    //   liElem.textContent = `${allProducts[i].name}: views: ${allProducts[i].views}, votes: ${allProducts[i].votes}`;
+    //   results.appendChild(liElem);
+    // }
     button.removeEventListener('click', handleShowResults);
   }
 }
 
-images.addEventListener('click', handleClick);
+function renderChart(){
 
+  let productName = [];
+  let productVotes = [];
+  let productViews = [];
+
+  for(let i = 0; i < allProducts.length; i++) {
+    productName.push(allProducts[i].name);
+    productVotes.push(allProducts[i].votes);
+    productViews.push(allProducts[i].views);
+  }
+
+  let myChart = {
+    type: 'bar',
+    data: {
+      labels: productName,
+      datasets: [{
+        label: '# of Votes',
+        data: productVotes,
+        backgroundColor: [
+          'gray'
+        ],
+        borderColor: [
+          'rgb(43, 181, 206)'
+        ],
+        borderWidth: 2
+      },
+
+      {
+        label: '# of views',
+        data: productViews,
+        backgroundColor: [
+          'rgb(43, 181, 206)'
+        ],
+        borderColor: [
+          'rgb(43, 181, 206)'
+        ],
+        borderWidth: 2
+      }]
+    },
+    options: {
+      // indexAxis: 'y',
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  };
+
+  new Chart(canvasElem, myChart);
+}
+
+images.addEventListener('click', handleClick);
 button.addEventListener('click', handleShowResults);
